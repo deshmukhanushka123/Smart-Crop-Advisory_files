@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Crop Advisory</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ======= REGISTER PAGE ======= -->
+<section id="registerPage" class="page">
+  <div class="container">
+    <h2>🌱 Smart Crop Advisory</h2>
+    <div class="card">
+      <h3>Create Account</h3>
+      <input id="name" placeholder="Full Name">
+      <input id="email" type="email" placeholder="Email">
+      <input id="phone" type="tel" placeholder="Contact Number">
+      <input id="password" type="password" placeholder="Password">
+
+      <select id="role">
+        <option value="">Select Role</option>
+        <option>Farmer</option>
+        <option>Buyer</option>
+        <option>Farmer & Buyer</option>
+      </select>
+
+      <button onclick="registerUser()">Register</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======= PROFILE PAGE ======= -->
+<section id="profilePage" class="page hide">
+  <div class="container">
+    <h2>🌱 Smart Crop Advisory</h2>
+    <div class="card">
+      <h3>Profile</h3>
+      <p><b>Name:</b> <span id="pname"></span></p>
+      <p><b>Email:</b> <span id="pemail"></span></p>
+      <p><b>Contact:</b> <span id="pphone"></span></p>
+      <p><b>Role:</b> <span id="prole"></span></p>
+
+      <button onclick="showSettings()">Go to Settings</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======= SETTINGS PAGE ======= -->
+<section id="settingsPage" class="page hide">
+  <header class="header">
+    <h2>🌱 Smart Crop Advisory </h2>
+  </header>
+
+  <section class="settings-container">
+    <div class="section-title">
+      <h3>⚙️ Account Settings</h3>
+    </div>
+
+    <div class="card" onclick="openModal('editProfile')">
+      <div class="card-title">✏️ Edit Profile</div>
+      <div class="card-desc">Update name, address, farming details & profile photo</div>
+    </div>
+
+    <div class="card" onclick="openModal('changeContact')">
+      <div class="card-title">📱 Change Mobile Number / Email</div>
+      <div class="card-desc">Update using OTP verification for security</div>
+    </div>
+
+    <div class="card" onclick="openModal('changePassword')">
+      <div class="card-title">🔐 Change Password / OTP Settings</div>
+      <div class="card-desc">Change password, enable OTP login & manage security</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🌐 Language Selection</div>
+      <div class="card-desc">
+        <select id="language">
+          <option>English</option>
+          <option>Hindi</option>
+          <option>Marathi</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔔 Notifications</div>
+      <div class="card-desc">
+        <div class="toggle">
+          <input type="checkbox" id="diseaseAlert">
+          <label for="diseaseAlert">Disease detection results</label>
+        </div>
+        <div class="toggle">
+          <input type="checkbox" id="treatmentAlert">
+          <label for="treatmentAlert">Treatment reminders</label>
+        </div>
+        <div class="toggle">
+          <input type="checkbox" id="weatherAlert">
+          <label for="weatherAlert">Weather updates</label>
+        </div>
+        <div class="toggle">
+          <input type="checkbox" id="orderAlert">
+          <label for="orderAlert">Marketplace order updates</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">
+      <h3>🆘 Help & Support</h3>
+    </div>
+
+    <div class="card" onclick="openModal('faq')">
+      <div class="card-title">❓ FAQ</div>
+      <div class="card-desc">Common questions about disease detection, treatment & marketplace</div>
+    </div>
+
+    <div class="card" onclick="openModal('contact')">
+      <div class="card-title">📞 Contact Support</div>
+      <div class="card-desc">Call, email or in-app message for assistance</div>
+    </div>
+
+    <div class="card" onclick="openModal('report')">
+      <div class="card-title">🐞 Report a Problem</div>
+      <div class="card-desc">Report technical issues or incorrect predictions</div>
+    </div>
+
+    <div class="section-title">
+      <h3>📱 App Info</h3>
+    </div>
+
+    <div class="card" onclick="openModal('about')">
+      <div class="card-title">About Project</div>
+      <div class="card-desc">AI-based crop advisory platform</div>
+    </div>
+
+    <div class="card" onclick="openModal('team')">
+      <div class="card-title">Team Details</div>
+      <div class="card-desc">Team members & roles</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Version</div>
+      <div class="card-desc">v1.0</div>
+    </div>
+
+    <button class="logout" onclick="logout()">Log Out</button>
+  </section>
+</section>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <span class="close" onclick="closeModal()">×</span>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<script>
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hide'));
+  document.getElementById(page).classList.remove('hide');
+}
+
+function registerUser(){
+  if(!document.getElementById("name").value || !document.getElementById("email").value ||
+     !document.getElementById("phone").value || !document.getElementById("role").value){
+    alert("Fill all fields");
+    return;
+  }
+
+  localStorage.setItem("name", document.getElementById("name").value);
+  localStorage.setItem("email", document.getElementById("email").value);
+  localStorage.setItem("phone", document.getElementById("phone").value);
+  localStorage.setItem("role", document.getElementById("role").value);
+
+  showProfile();
+}
+
+function showProfile(){
+  document.getElementById("pname").innerText = localStorage.getItem("name");
+  document.getElementById("pemail").innerText = localStorage.getItem("email");
+  document.getElementById("pphone").innerText = localStorage.getItem("phone");
+  document.getElementById("prole").innerText = localStorage.getItem("role");
+  showPage('profilePage');
+}
+
+function showSettings(){
+  showPage('settingsPage');
+}
+
+function openModal(type){
+  let html = "";
+
+  if(type === 'editProfile'){
+    html = `
+      <h2>Edit Profile</h2>
+      <input placeholder="Name" id="editName">
+      <input placeholder="Address" id="editAddress">
+      <input placeholder="Farming Details" id="editFarm">
+      <button onclick="saveProfile()">Save</button>
+    `;
+  }
+
+  if(type === 'changeContact'){
+    html = `
+      <h2>Change Mobile/Email</h2>
+      <input placeholder="New Mobile" id="newMobile">
+      <input placeholder="New Email" id="newEmail">
+      <button onclick="saveContact()">Verify OTP</button>
+    `;
+  }
+
+  if(type === 'changePassword'){
+    html = `
+      <h2>Change Password</h2>
+      <input type="password" placeholder="Old Password" id="oldPass">
+      <input type="password" placeholder="New Password" id="newPass">
+      <button onclick="savePassword()">Save</button>
+    `;
+  }
+
+  if(type === 'faq'){
+    html = `
+      <h2>FAQ</h2>
+      <p><b>Q1:</b> How to use disease detection?</p>
+      <p><b>A1:</b> Upload image & get results.</p>
+      <p><b>Q2:</b> How to buy products?</p>
+      <p><b>A2:</b> Go to marketplace and place order.</p>
+    `;
+  }
+
+  if(type === 'contact'){
+    html = `
+      <h2>Contact Support</h2>
+      <p>Email: support@smartcropAdvisory.com</p>
+      <p>Phone:
+        9359443187<br>
+        8010918414 <br>
+        9860373336</p>
+    `;
+  }
+
+  if(type === 'report'){
+    html = `
+      <h2>Report a Problem</h2>
+      <textarea id="reportText" placeholder="Describe the problem"></textarea>
+      <button onclick="sendReport()">Send</button>
+    `;
+  }
+
+  if(type === 'about'){
+    html = `
+      <h2>About Project</h2>
+      <p>AI-based crop advisory platform for farmers.</p>
+    `;
+  }
+
+  if(type === 'team'){
+    html = `
+      <h2>Team Details</h2>
+      <p>Team Name: <b>Team Orion</b></p>
+      <p>Members:</p>
+      <p>
+        Kshitij Pundkar<br>
+        Anushka Deshmukh<br>
+        Vaidahi Mohod<br>
+        Aryan Deshmukh<br>
+        Vishwajit Khade
+      </p>
+    `;
+  }
+
+  document.getElementById("modal-content").innerHTML = html;
+  document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal(){
+  document.getElementById("modal").style.display = "none";
+}
+
+function saveProfile(){
+  alert("Profile Updated Successfully!");
+  closeModal();
+}
+
+function saveContact(){
+  alert("OTP Verified & Updated!");
+  closeModal();
+}
+
+function savePassword(){
+  alert("Password Changed Successfully!");
+  closeModal();
+}
+
+function sendReport(){
+  alert("Report Sent!");
+  closeModal();
+}
+
+function logout(){
+  localStorage.clear();
+  alert("Logged Out!");
+  showPage('registerPage');
+}
+</script>
+
+</body>
+</html>
